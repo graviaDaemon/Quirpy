@@ -17,58 +17,63 @@ pub struct ProjectState {
     pub style: StyleState,
 }
 
-pub fn ui(ui: &mut egui::Ui, project: &mut ProjectState) {
+pub fn ui(ui: &mut egui::Ui, project: &mut ProjectState) -> bool {
     ui.heading("Data");
     ui.separator();
 
-    egui::ScrollArea::vertical().show(ui, |ui| {
-        ui.label("Project name");
-        ui.add(
-            egui::TextEdit::singleline(&mut project.name)
-                .hint_text("Untitled")
-                .desired_width(f32::INFINITY),
-        );
+    egui::ScrollArea::vertical()
+        .show(ui, |ui| {
+            ui.label("Project name");
+            ui.add(
+                egui::TextEdit::singleline(&mut project.name)
+                    .hint_text("Untitled")
+                    .desired_width(f32::INFINITY),
+            );
 
-        ui.add_space(8.0);
+            ui.add_space(8.0);
 
-        egui::ComboBox::from_label("Data type")
-            .selected_text(project.data_type.to_string())
-            .show_ui(ui, |ui| {
-                for data_type in QrDataType::ALL {
-                    if ui
-                        .selectable_value(&mut project.data_type, data_type, data_type.to_string())
-                        .changed()
-                    {
-                        tracing::debug!(?data_type, "data type changed");
+            egui::ComboBox::from_label("Data type")
+                .selected_text(project.data_type.to_string())
+                .show_ui(ui, |ui| {
+                    for data_type in QrDataType::ALL {
+                        if ui
+                            .selectable_value(
+                                &mut project.data_type,
+                                data_type,
+                                data_type.to_string(),
+                            )
+                            .changed()
+                        {
+                            tracing::debug!(?data_type, "data type changed");
+                        }
                     }
-                }
-            });
+                });
 
-        ui.add_space(8.0);
+            ui.add_space(8.0);
 
-        let changed = match project.data_type {
-            QrDataType::Url => url_fields(ui, &mut project.fields.url),
-            QrDataType::Text => text_fields(ui, &mut project.fields.text),
-            QrDataType::Wifi => wifi_fields(ui, &mut project.fields.wifi),
-            QrDataType::VCard => vcard_fields(ui, &mut project.fields.vcard),
-            QrDataType::Calendar => calendar_fields(ui, &mut project.fields.calendar),
-            QrDataType::Messaging => messaging_fields(ui, &mut project.fields.messaging),
-            QrDataType::Mfa => mfa_fields(ui, &mut project.fields.mfa),
-        };
-        if changed {
-            tracing::debug!(data_type = ?project.data_type, "field changed");
-        }
+            let changed = match project.data_type {
+                QrDataType::Url => url_fields(ui, &mut project.fields.url),
+                QrDataType::Text => text_fields(ui, &mut project.fields.text),
+                QrDataType::Wifi => wifi_fields(ui, &mut project.fields.wifi),
+                QrDataType::VCard => vcard_fields(ui, &mut project.fields.vcard),
+                QrDataType::Calendar => calendar_fields(ui, &mut project.fields.calendar),
+                QrDataType::Messaging => messaging_fields(ui, &mut project.fields.messaging),
+                QrDataType::Mfa => mfa_fields(ui, &mut project.fields.mfa),
+            };
+            if changed {
+                tracing::debug!(data_type = ?project.data_type, "field changed");
+            }
 
-        ui.add_space(12.0);
-        style_section(ui, &mut project.style);
+            ui.add_space(12.0);
+            style_section(ui, &mut project.style);
 
-        ui.add_space(12.0);
-        payload_line(ui, project);
+            ui.add_space(12.0);
+            payload_line(ui, project);
 
-        ui.add_space(12.0);
-        ui.add_enabled(false, egui::Button::new("Save Project"))
-            .on_disabled_hover_text("Coming soon");
-    });
+            ui.add_space(12.0);
+            ui.button("Save Project").clicked()
+        })
+        .inner
 }
 
 fn url_fields(ui: &mut egui::Ui, fields: &mut UrlFields) -> bool {

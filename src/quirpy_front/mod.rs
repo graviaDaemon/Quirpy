@@ -1,7 +1,11 @@
+pub mod about;
+pub mod actions;
 pub mod app;
 pub mod form;
+pub mod history;
 pub mod menu;
 #[cfg(target_os = "macos")]
 pub mod menu_native;
 pub mod preview;
+pub mod settings;
 pub mod style;

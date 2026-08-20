@@ -4,12 +4,21 @@ version = "0.0.1"
 edition = "2024"
 
 [dependencies]
+base64 = "0.23.1"
+directories = "6.0.0"
 eframe = "0.36.1"
 egui = "0.36.1"
 egui_extras = { version = "0.36.1", default-features = false, features = ["datepicker"] }
 jiff = "0.2.35"
+rfd = "0.17.2"
+rust-ini = "0.21.3"
+sha2 = "0.11.0"
 tracing = "0.1.44"
+tracing-appender = "0.2.5"
 tracing-subscriber = { version = "0.3.23", features = ["env-filter", "fmt"] }
+
+[build-dependencies]
+jiff = "0.2.35"
 
 [target.'cfg(target_os = "macos")'.dependencies]
 muda = "0.19"
