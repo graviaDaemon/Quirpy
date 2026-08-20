@@ -1,0 +1,13 @@
+[package]
+name = "Quirpy"
+version = "0.0.1"
+edition = "2024"
+
+[dependencies]
+eframe = "0.36.1"
+egui = "0.36.1"
+tracing = "0.1.44"
+tracing-subscriber = { version = "0.3.23", features = ["env-filter", "fmt"] }
+
+[target.'cfg(target_os = "macos")'.dependencies]
+muda = "0.19"
