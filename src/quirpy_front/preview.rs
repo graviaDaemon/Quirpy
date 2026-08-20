@@ -1,8 +1,9 @@
 use crate::quirpy_encoder;
+use crate::quirpy_front::style::StyleState;
 
 const MATRIX_SIZE: usize = 21;
 
-pub fn ui(ui: &mut egui::Ui) {
+pub fn ui(ui: &mut egui::Ui, style: &StyleState) {
     ui.heading("Preview");
     ui.separator();
 
@@ -13,10 +14,10 @@ pub fn ui(ui: &mut egui::Ui) {
     let (rect, _response) = ui.allocate_exact_size(egui::vec2(side, side), egui::Sense::hover());
 
     let painter = ui.painter_at(rect);
-    painter.rect_filled(rect, 0.0, ui.visuals().extreme_bg_color);
+    painter.rect_filled(rect, 0.0, style.light);
 
     let module_size = side / MATRIX_SIZE as f32;
-    let module_color = ui.visuals().text_color();
+    let module_color = style.dark;
 
     for (row, cells) in matrix.iter().enumerate() {
         for (col, &on) in cells.iter().enumerate() {

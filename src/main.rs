@@ -1,5 +1,6 @@
 mod quirpy_encoder;
 mod quirpy_front;
+mod quirpy_payload;
 
 use quirpy_front::app::QuirpyApp;
 use tracing_subscriber::EnvFilter;

@@ -1,4 +1,4 @@
-use crate::quirpy_front::{form::FormState, menu};
+use crate::quirpy_front::{form::ProjectState, menu};
 use muda::{Menu, MenuItem, PredefinedMenuItem, Submenu};
 
 pub struct NativeMenu {
@@ -78,10 +78,10 @@ impl NativeMenu {
         }
     }
 
-    pub fn poll(&self, form: &mut FormState, ctx: &egui::Context) {
+    pub fn poll(&self, project: &mut ProjectState, ctx: &egui::Context) {
         while let Ok(event) = muda::MenuEvent::receiver().try_recv() {
             if event.id == self.new_id {
-                menu::action_new(form);
+                menu::action_new(project);
             } else if event.id == self.exit_id {
                 menu::action_exit(ctx);
             }

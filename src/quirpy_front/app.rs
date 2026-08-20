@@ -1,7 +1,7 @@
-use crate::quirpy_front::{form::FormState, menu, preview};
+use crate::quirpy_front::{form::ProjectState, menu, preview};
 
 pub struct QuirpyApp {
-    form: FormState,
+    project: ProjectState,
     dark_mode: bool,
     #[cfg(target_os = "macos")]
     native_menu: crate::quirpy_front::menu_native::NativeMenu,
@@ -10,7 +10,7 @@ pub struct QuirpyApp {
 impl QuirpyApp {
     pub fn new() -> Self {
         Self {
-            form: FormState::default(),
+            project: ProjectState::default(),
             dark_mode: true,
             #[cfg(target_os = "macos")]
             native_menu: crate::quirpy_front::menu_native::NativeMenu::init(),
@@ -35,7 +35,7 @@ impl eframe::App for QuirpyApp {
 
         #[cfg(target_os = "macos")]
         {
-            self.native_menu.poll(&mut self.form, &ctx);
+            self.native_menu.poll(&mut self.project, &ctx);
             ctx.request_repaint_after(std::time::Duration::from_millis(100));
         }
 
@@ -46,17 +46,17 @@ impl eframe::App for QuirpyApp {
 
         #[cfg(not(target_os = "macos"))]
         egui::Panel::top("top_panel").show(ui, |ui| {
-            menu::ui_full(ui, &ctx, &mut self.form, &mut self.dark_mode);
+            menu::ui_full(ui, &ctx, &mut self.project, &mut self.dark_mode);
         });
 
         egui::Panel::left("form_panel")
             .default_size(340.0)
             .show(ui, |ui| {
-                crate::quirpy_front::form::ui(ui, &mut self.form);
+                crate::quirpy_front::form::ui(ui, &mut self.project);
             });
 
         egui::CentralPanel::default().show(ui, |ui| {
-            preview::ui(ui);
+            preview::ui(ui, &self.project.style);
         });
     }
 }

@@ -1,7 +1,7 @@
-use crate::quirpy_front::form::FormState;
+use crate::quirpy_front::form::ProjectState;
 
-pub fn action_new(form: &mut FormState) {
-    *form = FormState::default();
+pub fn action_new(project: &mut ProjectState) {
+    *project = ProjectState::default();
     tracing::info!("new project (form reset to default)");
 }
 
@@ -10,11 +10,16 @@ pub fn action_exit(ctx: &egui::Context) {
     ctx.send_viewport_cmd(egui::ViewportCommand::Close);
 }
 
-pub fn ui_full(ui: &mut egui::Ui, ctx: &egui::Context, form: &mut FormState, dark_mode: &mut bool) {
+pub fn ui_full(
+    ui: &mut egui::Ui,
+    ctx: &egui::Context,
+    project: &mut ProjectState,
+    dark_mode: &mut bool,
+) {
     egui::MenuBar::new().ui(ui, |ui| {
         ui.menu_button("File", |ui| {
             if ui.button("New").clicked() {
-                action_new(form);
+                action_new(project);
                 ui.close();
             }
 
