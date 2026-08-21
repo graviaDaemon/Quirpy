@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Quirpy
+Comment=Generate QR codes locally
+Exec=Quirpy
+Icon=quirpy
+Categories=Utility;Graphics;
+Terminal=false

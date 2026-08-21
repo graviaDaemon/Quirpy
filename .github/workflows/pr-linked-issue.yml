@@ -1,0 +1,44 @@
+name: PR linked issue
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize, labeled, unlabeled]
+
+jobs:
+  pr-linked-issue:
+    name: pr-linked-issue
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const body = pr.body || '';
+            const labels = (pr.labels || []).map(l => l.name);
+
+            if (pr.user.login === 'dependabot[bot]') {
+              core.info('Author is dependabot[bot] — generated pull requests are exempt.');
+              return;
+            }
+
+            if (labels.includes('no-issue-needed')) {
+              core.info('The no-issue-needed label is applied — skipping the linked-issue check.');
+              return;
+            }
+
+            const pattern = /(close[sd]?|fix(e[sd])?|resolve[sd]?)\s*:?\s+(#\d+|https:\/\/github\.com\/graviaDaemon\/Quirpy\/issues\/\d+)/i;
+            if (pattern.test(body)) {
+              core.info('Found a closing keyword linking an issue.');
+              return;
+            }
+
+            core.setFailed(
+              'This pull request does not link an issue.\n\n' +
+              'Add a line to the pull request description that closes the issue it belongs to, for example:\n\n' +
+              '    Closes #123\n\n' +
+              'Accepted keywords are close/closes/closed, fix/fixes/fixed and resolve/resolves/resolved,\n' +
+              'followed by #<number> or the full issue URL. Editing the description re-runs this check —\n' +
+              'you do not need to push again.\n\n' +
+              'If there is genuinely no issue to link (a typo or docs-only change), a maintainer can apply\n' +
+              'the no-issue-needed label and this check will pass.'
+            );

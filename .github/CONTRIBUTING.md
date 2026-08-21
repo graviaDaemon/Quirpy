@@ -87,6 +87,19 @@ the maintainer):
 
 These map one-to-one onto the categories in `.github/release.yml`; keep the two lists identical.
 
+`no-issue-needed` and `needs-triage` also exist, but they are maintainer-applied and excluded from
+the release notes.
+
+## Releases
+
+Releases are cut by the maintainer only. The version lives in `Cargo.toml`; a release is a `v*.*.*`
+tag pushed to `main`, and the release workflow refuses to publish when the tag and `Cargo.toml`
+disagree. Contributors never tag and never bump the version in a pull request — say so in the issue
+if you think a release is due.
+
+Pushing the tag builds and publishes the macOS, Windows and Linux artifacts, with notes generated
+from the labels above.
+
 ## Project layout
 
 - `src/quirpy_front/` — the egui interface. `app.rs` holds application state, `form.rs` is the left
