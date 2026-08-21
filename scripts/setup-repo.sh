@@ -123,7 +123,7 @@ plan "enable, so the SECURITY.md advisory link works"
 call "private vulnerability reporting" PUT "/repos/$OWNER/$REPO/private-vulnerability-reporting"
 
 say "4. Labels"
-plan "internal, no-issue-needed, needs-triage (existing labels are left alone)"
+plan "dependencies, internal, no-issue-needed, needs-triage (existing labels are left alone)"
 label() {
   local name="$1" color="$2" desc="$3"
   local body
@@ -131,6 +131,7 @@ label() {
     '{name: $n, color: $c, description: $d}')
   call "label $name" POST "/repos/$OWNER/$REPO/labels" "$body" 422
 }
+label "dependencies" "0366d6" "Dependency bumps — applied by Dependabot"
 label "internal" "ededed" "Refactors, CI, tooling — anything users do not see"
 label "no-issue-needed" "c5def5" "Trivial change exempt from the linked-issue check"
 label "needs-triage" "fbca04" "Not yet looked at by the maintainer"
