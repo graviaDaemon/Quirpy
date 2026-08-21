@@ -1,3 +1,5 @@
+#![windows_subsystem = "windows"]
+
 mod quirpy_config;
 mod quirpy_encoder;
 mod quirpy_front;

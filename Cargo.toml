@@ -2,6 +2,11 @@
 name = "Quirpy"
 version = "0.0.1"
 edition = "2024"
+license = "MIT"
+rust-version = "1.85"
+description = "A hand-rolled QR code generator with a cross-platform GUI"
+repository = "https://github.com/graviaDaemon/Quirpy"
+readme = "README.md"
 
 [dependencies]
 base64 = "0.23.1"
@@ -22,3 +27,7 @@ jiff = "0.2.35"
 
 [target.'cfg(target_os = "macos")'.dependencies]
 muda = "0.19"
+
+[profile.release]
+lto = "thin"
+strip = "symbols"

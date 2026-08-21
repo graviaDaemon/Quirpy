@@ -1,0 +1,101 @@
+name: Bug report
+description: Something in Quirpy does not work the way it should.
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report this.
+
+        **Before you paste anything:** logs, screenshots and `.qpy` files can contain Wi-Fi
+        passwords, TOTP secrets and personal contact details. Please strip them — `.qpy` files
+        obfuscate their contents, they do not encrypt them.
+
+  - type: input
+    id: version
+    attributes:
+      label: Quirpy version
+      description: Found under Help → Version.
+      placeholder: 0.1.0-9cf247a
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - macOS
+        - Windows
+        - Linux
+    validations:
+      required: true
+
+  - type: input
+    id: os-version
+    attributes:
+      label: Operating system version
+      placeholder: macOS 15.2 / Windows 11 23H2 / Fedora 41
+    validations:
+      required: true
+
+  - type: dropdown
+    id: data-type
+    attributes:
+      label: QR data type
+      description: Which data type were you working with when this happened?
+      options:
+        - URL
+        - Text
+        - Wi-Fi
+        - vCard
+        - Calendar
+        - Messaging
+        - MFA
+        - Not applicable
+    validations:
+      required: false
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected to happen
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open Quirpy
+        2. Select ...
+        3. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: Settings → System → **Open log folder**. Paste only what is relevant, with secrets removed.
+      render: shell
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Before submitting
+      options:
+        - label: I have removed any Wi-Fi passwords, TOTP secrets, or personal contact details from the logs and attachments above.
+          required: true
+        - label: I have searched existing issues.
+          required: true

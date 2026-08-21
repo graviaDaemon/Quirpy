@@ -1,6 +1,10 @@
-requests
-plan
-Cargo.lock
-CLAUDE.md
-preface.md
-target
+/target/
+/dist/
+
+/plan/
+/requests/
+/CLAUDE.md
+/preface.md
+
+.DS_Store
+*.swp

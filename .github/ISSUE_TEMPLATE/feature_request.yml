@@ -1,0 +1,40 @@
+name: Feature request
+description: Suggest something Quirpy should be able to do.
+labels: ["enhancement", "needs-triage"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: What are you trying to do that Quirpy makes hard or impossible? Describe the problem, not the solution — the best fix is often not the one either of us thought of first.
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: What you would like Quirpy to do.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Other approaches you thought about, and why they are worse.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope check
+      description: See the scope section of [CONTRIBUTING.md](https://github.com/graviaDaemon/Quirpy/blob/main/.github/CONTRIBUTING.md#scope).
+      options:
+        - label: This does not require a server, an account, or sending user data anywhere — Quirpy is local-only by design.
+          required: true
+        - label: This is not a dynamic QR code, SQRC, or FrameQR.
+          required: true
+        - label: I have searched existing issues.
+          required: true
