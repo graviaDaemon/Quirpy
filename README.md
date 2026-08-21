@@ -3,7 +3,7 @@
 *A QR code generator that builds its codes by hand.*
 
 [![CI](https://github.com/graviaDaemon/Quirpy/actions/workflows/ci.yml/badge.svg)](https://github.com/graviaDaemon/Quirpy/actions/workflows/ci.yml)
-[![Latest release](https://img.shields.io/github/v/release/graviaDaemon/Quirpy)](https://github.com/graviaDaemon/Quirpy/releases/latest)
+[![Latest release](https://img.shields.io/github/v/release/graviaDaemon/Quirpy?include_prereleases)](https://github.com/graviaDaemon/Quirpy/releases)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Rust 1.85+](https://img.shields.io/badge/rust-1.85%2B-orange.svg)](https://www.rust-lang.org/)
 
@@ -21,16 +21,21 @@ Everything stays on your machine. There is no server, no account, and nothing is
 
 ## Status
 
-**Pre-alpha.** What works today: the GUI, all seven data types, project save/load, settings and
-logging.
+**v0.1.0 — the first release, and an early one.** What works today: the GUI, all seven data types,
+project save/load, settings and logging, and the hand-rolled QR encoder — the preview shows a real,
+scannable Model 2 QR code at every version (1–40) and error correction level (L/M/Q/H).
 
-**The QR encoder itself is not built yet.** The preview shows a placeholder pattern and export is
-not wired up, so Quirpy cannot produce a real, scannable QR code at this point. See
-[docs/design.md](docs/design.md) for where it is going.
+**Export is not wired up yet**, so the code can be scanned off the screen but not saved as a PNG,
+SVG or JPG. Micro QR and rMQR are not supported. See [docs/design.md](docs/design.md) for where it
+is going.
+
+Every `0.x` release is published as a GitHub pre-release, which is an accurate description of it.
+Bug reports are the most useful thing you can send right now — above all, a code that will not
+scan, together with the payload and settings that produced it.
 
 ## Download
 
-Builds for each release are on the [Releases page](https://github.com/graviaDaemon/Quirpy/releases/latest).
+Builds for each release are on the [Releases page](https://github.com/graviaDaemon/Quirpy/releases).
 
 | Platform | Asset | First launch |
 | --- | --- | --- |
