@@ -19,6 +19,11 @@ encoder for `qrcode`, `fast_qr`, `rxing` or anything similar deletes the reason 
 and it will be declined no matter how good the code is. If you want to help with the encoder, help
 with the hand-written one.
 
+This covers dev-dependencies too: a reference implementation in the test suite would quietly become
+the authority on whether our encoder is correct, which is the exact thing the project exists to
+avoid. The encoder is validated against published ISO/IEC 18004 test vectors, invariants that
+cross-check the transcribed tables, and a phone camera.
+
 More generally: new dependencies of any kind need a justification in the pull request. Quirpy is a
 desktop app that people download as a binary, so every crate added is code someone runs on their
 machine on our recommendation.
@@ -111,8 +116,12 @@ from the labels above.
   imports. New data types start here and are unit-tested against their expected output string.
 - `src/quirpy_project/` — `.qpy` save files (INI, plus a checksum and value obfuscation).
 - `src/quirpy_config/` — user configuration.
-- `src/quirpy_encoder/` — the hand-rolled QR encoder. Mostly unbuilt. This is where the interesting
-  work is.
+- `src/quirpy_encoder/` — the hand-rolled QR encoder, split by stage: `galois.rs` (GF(256) and
+  Reed–Solomon), `tables.rs` (the few transcribed spec tables plus derived capacities),
+  `segment.rs` (mode selection and the data bit stream), `blocks.rs` (block split, error
+  correction, interleaving), `matrix.rs` (function patterns and data placement), `mask.rs` (the
+  eight masks and penalty scoring), `format.rs` (format and version information). This is where the
+  interesting work is.
 - `docs/design.md` — where the project is headed, and why.
 
 ## Scope
@@ -122,6 +131,8 @@ Some things are settled and will not be accepted:
 - **Dynamic QR codes.** They need a redirect server and scan tracking, which contradicts Quirpy
   being entirely local.
 - **SQRC and FrameQR.** Proprietary formats, out of scope.
+- **QR Model 1.** Dropped from the current edition of ISO/IEC 18004, and no mainstream scanner
+  reads it — which would leave the code with no way to verify it works.
 - **Analytics or telemetry of any kind.** Quirpy makes no network calls except the (not yet built)
   update check against GitHub Releases.
 

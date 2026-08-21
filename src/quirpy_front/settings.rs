@@ -57,6 +57,13 @@ fn body(ui: &mut egui::Ui, config: &mut Config) {
                             }
                         });
                     ui.end_row();
+
+                    ui.label("QR details");
+                    ui.checkbox(
+                        &mut config.show_preview_details,
+                        "Show details under the preview",
+                    );
+                    ui.end_row();
                 });
         });
 

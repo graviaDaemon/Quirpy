@@ -16,6 +16,7 @@ const SAVE_LOCATION: &str = "default_save_location";
 const EXPORT_FORMAT: &str = "default_export_format";
 const LOG_LEVEL: &str = "log_level";
 const LOG_TO_FILE: &str = "log_to_file";
+const SHOW_PREVIEW_DETAILS: &str = "show_preview_details";
 
 pub const THEMES: [ThemePreference; 3] = [
     ThemePreference::Light,
@@ -136,14 +137,29 @@ fn parse_theme(value: &str) -> Option<ThemePreference> {
     }
 }
 
-#[derive(Debug, Clone, Default, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Config {
     pub recent_files: Vec<PathBuf>,
     pub theme: ThemePreference,
+    pub show_preview_details: bool,
     pub default_save_location: Option<PathBuf>,
     pub default_export_format: ExportFormat,
     pub log_level: LogLevel,
     pub log_to_file: bool,
+}
+
+impl Default for Config {
+    fn default() -> Self {
+        Self {
+            recent_files: Vec::new(),
+            theme: ThemePreference::default(),
+            show_preview_details: true,
+            default_save_location: None,
+            default_export_format: ExportFormat::default(),
+            log_level: LogLevel::default(),
+            log_to_file: false,
+        }
+    }
 }
 
 impl Config {
@@ -191,6 +207,12 @@ pub fn load() -> Config {
     Config {
         recent_files: read_recents(ini.section(Some(RECENT))),
         theme: read(general, THEME, parse_theme, ThemePreference::default()),
+        show_preview_details: read(
+            general,
+            SHOW_PREVIEW_DETAILS,
+            |value| value.parse().ok(),
+            true,
+        ),
         default_save_location: read_save_location(system),
         default_export_format: read(
             system,
@@ -277,7 +299,11 @@ pub fn save(config: &Config) -> Result<(), io::Error> {
     let mut ini = Ini::new();
 
     ini.with_section(Some(GENERAL))
-        .set(THEME, theme_keyword(config.theme));
+        .set(THEME, theme_keyword(config.theme))
+        .set(
+            SHOW_PREVIEW_DETAILS,
+            config.show_preview_details.to_string(),
+        );
 
     let mut system = ini.with_section(Some(SYSTEM));
     system

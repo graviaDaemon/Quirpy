@@ -1,13 +1,12 @@
+use crate::quirpy_encoder::EcLevel;
 use crate::quirpy_front::style::{self, ContrastWarning, StyleState};
 use crate::quirpy_payload::{
-    self, DataFields, calendar::CalendarFields, messaging::MessagingFields,
-    messaging::MessagingMode, mfa::Algorithm, mfa::MfaFields, simple::TextFields,
-    simple::UrlFields, vcard::VCardFields, wifi::WifiFields, wifi::WifiSecurity,
+    DataFields, calendar::CalendarFields, messaging::MessagingFields, messaging::MessagingMode,
+    mfa::Algorithm, mfa::MfaFields, simple::TextFields, simple::UrlFields, vcard::VCardFields,
+    wifi::WifiFields, wifi::WifiSecurity,
 };
 
 pub use crate::quirpy_payload::QrDataType;
-
-const PAYLOAD_PREVIEW_CHARS: usize = 180;
 
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct ProjectState {
@@ -15,6 +14,7 @@ pub struct ProjectState {
     pub data_type: QrDataType,
     pub fields: DataFields,
     pub style: StyleState,
+    pub ec_level: EcLevel,
 }
 
 pub fn ui(ui: &mut egui::Ui, project: &mut ProjectState) -> bool {
@@ -65,10 +65,7 @@ pub fn ui(ui: &mut egui::Ui, project: &mut ProjectState) -> bool {
             }
 
             ui.add_space(12.0);
-            style_section(ui, &mut project.style);
-
-            ui.add_space(12.0);
-            payload_line(ui, project);
+            style_section(ui, &mut project.style, &mut project.ec_level);
 
             ui.add_space(12.0);
             ui.button("Save Project").clicked()
@@ -214,7 +211,7 @@ fn mfa_fields(ui: &mut egui::Ui, fields: &mut MfaFields) -> bool {
     changed || advanced
 }
 
-fn style_section(ui: &mut egui::Ui, style: &mut StyleState) {
+fn style_section(ui: &mut egui::Ui, style: &mut StyleState, ec_level: &mut EcLevel) {
     egui::CollapsingHeader::new("Style")
         .default_open(true)
         .show(ui, |ui| {
@@ -251,34 +248,24 @@ fn style_section(ui: &mut egui::Ui, style: &mut StyleState) {
                 }
                 None => {}
             }
+
+            ui.add_space(8.0);
+            egui::ComboBox::from_label("Error correction")
+                .selected_text(ec_level.label())
+                .show_ui(ui, |ui| {
+                    for level in EcLevel::ALL {
+                        if ui
+                            .selectable_value(ec_level, level, level.label())
+                            .changed()
+                        {
+                            tracing::debug!(?ec_level, "error correction changed");
+                        }
+                    }
+                });
+            if *ec_level == EcLevel::H {
+                ui.weak("Highest — leaves room for a centre logo.");
+            }
         });
-}
-
-// TEMPORARY: delete together with quirpy_encoder::placeholder_matrix once the real encoder
-// drives the preview (plan/00-decisions.md, 2026-08-20).
-fn payload_line(ui: &mut egui::Ui, project: &ProjectState) {
-    ui.separator();
-    ui.label("Payload");
-
-    match quirpy_payload::build(project.data_type, &project.fields) {
-        Ok(payload) => {
-            let shown = if payload.chars().count() > PAYLOAD_PREVIEW_CHARS {
-                let head: String = payload.chars().take(PAYLOAD_PREVIEW_CHARS).collect();
-                format!("{head}…")
-            } else {
-                payload.clone()
-            };
-            ui.add(
-                egui::Label::new(egui::RichText::new(shown).monospace())
-                    .wrap()
-                    .selectable(true),
-            )
-            .on_hover_text(payload);
-        }
-        Err(error) => {
-            ui.label(egui::RichText::new(error.to_string()).color(ui.visuals().error_fg_color));
-        }
-    }
 }
 
 fn singleline(ui: &mut egui::Ui, label: &str, value: &mut String) -> bool {

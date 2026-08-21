@@ -8,6 +8,7 @@ use std::path::Path;
 use ini::Ini;
 use sha2::{Digest, Sha256};
 
+use crate::quirpy_encoder::EcLevel;
 use crate::quirpy_front::form::ProjectState;
 use crate::quirpy_front::style::StyleState;
 use crate::quirpy_payload::{
@@ -185,6 +186,7 @@ fn to_entries(project: &ProjectState) -> Vec<Entry> {
             "data_type",
             data_type_key(project.data_type).to_owned(),
         ),
+        ("project", "ec_level", project.ec_level.keyword().to_owned()),
         ("colors", "dark", hex(project.style.dark)),
         ("colors", "light", hex(project.style.light)),
         ("fields.url", "url", fields.url.url.clone()),
@@ -287,6 +289,12 @@ fn from_values(values: &Values) -> ProjectState {
         .and_then(|value| data_type_from_key(&value))
     {
         project.data_type = data_type;
+    }
+    if let Some(ec_level) = values
+        .text("project", "ec_level")
+        .and_then(|value| EcLevel::parse(&value))
+    {
+        project.ec_level = ec_level;
     }
 
     project.style = StyleState {

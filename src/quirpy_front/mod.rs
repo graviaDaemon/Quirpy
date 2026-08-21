@@ -2,6 +2,7 @@ pub mod about;
 pub mod actions;
 pub mod app;
 pub mod form;
+pub mod generate;
 pub mod history;
 pub mod menu;
 #[cfg(target_os = "macos")]

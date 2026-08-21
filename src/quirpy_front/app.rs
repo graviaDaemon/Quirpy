@@ -3,7 +3,8 @@ use std::path::PathBuf;
 use crate::Logging;
 use crate::quirpy_config::Config;
 use crate::quirpy_front::{
-    about, actions, form::ProjectState, history::History, menu, preview, settings,
+    about, actions, form::ProjectState, generate::Generator, history::History, menu, preview,
+    settings,
 };
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -24,6 +25,7 @@ pub struct QuirpyApp {
     pub saved_state: ProjectState,
     pub current_path: Option<PathBuf>,
     pub history: History,
+    pub generator: Generator,
     pub config: Config,
     pub pending: Option<PendingAction>,
     pub error: Option<ErrorPrompt>,
@@ -45,6 +47,7 @@ impl QuirpyApp {
         Self {
             saved_state: project.clone(),
             history: History::new(&project),
+            generator: Generator::default(),
             project,
             current_path: None,
             pending: None,
@@ -278,7 +281,12 @@ impl eframe::App for QuirpyApp {
         }
 
         egui::CentralPanel::default().show(ui, |ui| {
-            preview::ui(ui, &self.project.style);
+            preview::ui(
+                ui,
+                &self.generator,
+                &self.project.style,
+                self.config.show_preview_details,
+            );
         });
 
         self.unsaved_changes_modal(&ctx);
@@ -290,6 +298,7 @@ impl eframe::App for QuirpyApp {
             self.dispatch(command, &ctx);
         }
 
+        self.generator.tick(&self.project, &ctx);
         self.history.maybe_commit(&self.project, &ctx);
         self.sync_title(&ctx);
     }
