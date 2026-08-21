@@ -37,7 +37,8 @@ cargo test
 On Debian/Ubuntu, `eframe` and `rfd` need system packages:
 
 ```sh
-sudo apt install libgtk-3-dev libxkbcommon-dev libwayland-dev libxcb1-dev pkg-config
+sudo apt install libgtk-3-dev libxkbcommon-dev libxkbcommon-x11-dev libwayland-dev \
+  libxcb1-dev libxcursor-dev libxrandr-dev libxi-dev pkg-config
 ```
 
 ## Before you push
