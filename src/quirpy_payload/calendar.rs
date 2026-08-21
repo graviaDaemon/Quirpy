@@ -172,7 +172,10 @@ mod tests {
             title: String::new(),
             ..populated()
         };
-        assert_eq!(build(&fields), Err(PayloadError::MissingField("Event title")));
+        assert_eq!(
+            build(&fields),
+            Err(PayloadError::MissingField("Event title"))
+        );
     }
 
     #[test]

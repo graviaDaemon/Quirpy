@@ -35,6 +35,10 @@ mod tests {
     fn the_baked_build_date_is_a_calendar_date() {
         let parts: Vec<&str> = BUILD_DATE.split('-').collect();
         assert_eq!(parts.len(), 3);
-        assert!(parts.iter().all(|part| part.chars().all(|c| c.is_ascii_digit())));
+        assert!(
+            parts
+                .iter()
+                .all(|part| part.chars().all(|c| c.is_ascii_digit()))
+        );
     }
 }

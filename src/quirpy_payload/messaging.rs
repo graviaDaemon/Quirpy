@@ -151,10 +151,7 @@ mod tests {
             number: "+31612345678".to_owned(),
             message: "On my way".to_owned(),
         };
-        assert_eq!(
-            build_sms(&fields).unwrap(),
-            "SMSTO:+31612345678:On my way"
-        );
+        assert_eq!(build_sms(&fields).unwrap(), "SMSTO:+31612345678:On my way");
     }
 
     #[test]
@@ -192,7 +189,10 @@ mod tests {
             number: "31612345678".to_owned(),
             ..Default::default()
         };
-        assert_eq!(build_whatsapp(&fields).unwrap(), "https://wa.me/31612345678");
+        assert_eq!(
+            build_whatsapp(&fields).unwrap(),
+            "https://wa.me/31612345678"
+        );
     }
 
     #[test]

@@ -216,7 +216,11 @@ fn read<T>(
     match parse(value.trim()) {
         Some(parsed) => parsed,
         None => {
-            tracing::warn!(key, value, "unusable configuration value; using the default");
+            tracing::warn!(
+                key,
+                value,
+                "unusable configuration value; using the default"
+            );
             default
         }
     }

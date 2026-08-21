@@ -104,7 +104,10 @@ mod tests {
 
     #[test]
     fn errors_render_as_user_facing_text() {
-        assert_eq!(PayloadError::MissingField("SSID").to_string(), "SSID is required");
+        assert_eq!(
+            PayloadError::MissingField("SSID").to_string(),
+            "SSID is required"
+        );
         assert_eq!(
             PayloadError::Invalid {
                 field: "Secret",

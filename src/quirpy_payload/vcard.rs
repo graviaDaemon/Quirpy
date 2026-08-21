@@ -92,7 +92,14 @@ mod tests {
 
         assert_eq!(
             build(&fields).unwrap(),
-            ["BEGIN:VCARD", "VERSION:3.0", "N:;Ada;;;", "FN:Ada", "END:VCARD"].join("\r\n")
+            [
+                "BEGIN:VCARD",
+                "VERSION:3.0",
+                "N:;Ada;;;",
+                "FN:Ada",
+                "END:VCARD"
+            ]
+            .join("\r\n")
         );
     }
 
